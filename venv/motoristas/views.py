@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import motorista, carros
+from .models import Motorista
 
-def motorista(request):
+def Motorista(request):
     if request.method == "GET":
-        return render(request, 'motorista.html')
+        return render(request, 'motoristas.html')
     elif request.method == "POST":
         nome = request.POST.get('nome')
         sobrenome = request.POST.get('sobrenome')
@@ -16,22 +16,22 @@ def motorista(request):
         ano = request.POST.getlist ('ano')
         kmdeoleo = request.POST.getlist ('kmdeoleo')
 
-        motorista = motorista.objects.filter(codigo=codigo)
+        motoristas = motoristas.objects.filter(codigo=codigo)
 
-        if motorista.exists():
-            return HttpResponse('Motorista já existe')
+        if motoristas.exists():
+            return HttpResponse('motorista já existe')
         
-        motorista = motorista(
+        motoristas = motoristas(
             nome = nome,
             sobrenome = sobrenome,
             email = email,
             telefone = telefone,
             codigo = codigo,
         )
-        motorista.save()
+        motoristas.save()
 
         for carros, placa, ano, kmdeoleo in zip(carros, placa, ano,kmdeoleo):
-            carros = carros(carro=carros, placa=placa, ano=ano, motorista=motorista, kmdeoleo=kmdeoleo)
+            carros = carros(carro=carros, placa=placa, ano=ano, motoristas=motoristas, kmdeoleo=kmdeoleo)
             carros.save()
         return HttpResponse('Cadastro realizado com sucesso')
     
